@@ -1,30 +1,60 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <q-layout view="lHh Lpr lFf">
+    <q-header bordered reveal>
+      <q-toolbar>
+        <q-btn
+          flat
+          dense
+          round
+          @click="leftDrawerOpen = !leftDrawerOpen"
+          aria-label="Menu"
+          icon="menu"
+        />
+
+        <q-toolbar-title> Vuetique </q-toolbar-title>
+
+        <div>
+          <q-btn
+            round
+            color="amber"
+            icon="shopping_cart"
+            class="q-mr-lg"
+            @click="rightDrawerOpen = !rightDrawerOpen"
+          />
+        </div>
+      </q-toolbar>
+    </q-header>
+
+    <Navbar :isOpen="leftDrawerOpen" />
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+
+    <CartAttached :isOpen="rightDrawerOpen" />
+  </q-layout>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { ref } from "vue";
+import Navbar from "./components/Navbar.vue";
+import HomeView from "./views/HomeView.vue";
+import CartAttached from "./components/CartAttached.vue";
 
-nav {
-  padding: 30px;
-}
+export default {
+  name: "LayoutDefault",
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  components: {
+    Navbar,
+    HomeView,
+    CartAttached,
+    HomeView,
+  },
+  setup() {
+    return {
+      leftDrawerOpen: ref(false),
+      rightDrawerOpen: ref(false),
+    };
+  },
+};
+</script>
