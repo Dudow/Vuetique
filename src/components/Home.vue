@@ -1,9 +1,11 @@
 <template>
-  <q-page class="cards-container q-pa-xl">
-    <Card />
-    <Card />
-    <Card />
-  </q-page>
+  <q-intersection transition="scale" class="example-item">
+    <q-page class="cards-container q-pa-xl">
+      <Card />
+      <Card />
+      <Card />
+    </q-page>
+  </q-intersection>
 </template>
 
 <style scoped>

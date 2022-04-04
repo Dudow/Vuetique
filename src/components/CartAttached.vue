@@ -6,87 +6,94 @@
     class="bg-grey-2"
     side="right"
   >
-    <q-table
-      title="Cart Preview"
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-      :pagination="initialPagination"
-      hide-header
-      hide-bottom
-    />
+    <q-list bordered>
+      <q-item v-ripple>
+        <q-item-section>Cart Preview</q-item-section>
+      </q-item>
+      <q-item v-ripple v-for="row in rows" :key="row.price">
+        <q-item-section class="col-7">{{ row.name }}</q-item-section>
+        <q-item-section class="col">({{ row.qtd }})</q-item-section>
+        <q-item-section avatar>
+          {{
+            Number(row.price).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })
+          }}
+        </q-item-section>
+      </q-item>
+
+      <q-separator />
+
+      <q-item v-ripple class="text-orange">
+        <q-item-section class="col-7">Total</q-item-section>
+        <q-item-section class="col">({{ totalQtd }})</q-item-section>
+        <q-item-section avatar>
+          {{
+            Number(totalPrice).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })
+          }}
+        </q-item-section>
+      </q-item>
+    </q-list>
   </q-drawer>
 </template>
 
 <script>
-const columns = [
-  {
-    required: true,
-    align: "left",
-    field: "name",
-  },
-  {
-    align: "center",
-    field: "calories",
-    format: (val) =>
-      `${Number(val).toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-      })}`,
-  },
-];
-
 const rows = [
   {
     name: "Frozen Yogurt",
-    calories: 159,
+    price: 159,
+    qtd: 1,
   },
   {
     name: "Ice cream sandwich",
-    calories: 237,
+    price: 237,
+    qtd: 1,
   },
   {
     name: "Eclair",
-    calories: 262,
+    price: 262,
+    qtd: 1,
   },
   {
     name: "Cupcake",
-    calories: 305,
+    price: 305,
+    qtd: 1,
   },
   {
     name: "Gingerbread",
-    calories: 356,
+    price: 356,
+    qtd: 1,
   },
   {
     name: "Jelly bean",
-    calories: 375,
+    price: 375,
+    qtd: 1,
   },
   {
     name: "Lollipop",
-    calories: 392,
+    price: 392,
+    qtd: 1,
   },
   {
     name: "Honeycomb",
-    calories: 408,
+    price: 408,
+    qtd: 1,
   },
   {
     name: "Donut",
-    calories: 452,
+    price: 452,
+    qtd: 1,
   },
   {
     name: "KitKat",
-    calories: 518,
-  },
-  {
-    name: "total",
-    calories: 21,
+    price: 518,
+    qtd: 1,
   },
 ];
-
-let total = 0;
-rows.map((row) => {
-  total = total + row.calories;
-});
 
 export default {
   name: "CartAttached",
@@ -95,14 +102,38 @@ export default {
   },
   setup() {
     return {
-      columns,
       rows,
-      initialPagination: {
-        page: 1,
-        rowsPerPage: 30,
-      },
-      total,
     };
+  },
+  data() {
+    return {
+      totalPrice: 0,
+      totalQtd: 0,
+    };
+  },
+  methods: {
+    getTotalPrice() {
+      let tempTotal = 0;
+
+      rows.map((row) => {
+        tempTotal = tempTotal + row.price;
+      });
+
+      this.totalPrice = tempTotal;
+    },
+    getTotalQtd() {
+      let tempTotal = 0;
+
+      rows.map((row) => {
+        tempTotal = tempTotal + row.qtd;
+      });
+
+      this.totalQtd = tempTotal;
+    },
+  },
+  mounted() {
+    this.getTotalPrice();
+    this.getTotalQtd();
   },
 };
 </script>
