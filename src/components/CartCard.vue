@@ -2,17 +2,32 @@
   <q-card class="my-card" flat bordered>
     <q-card-section horizontal class="q-pa-md col row">
       <div class="img-container">
-        <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" />
+        <q-img :src="item.image" />
       </div>
       <div class="info-container">
         <div>
-          <p class="text-primary">Nome</p>
-          <p>25</p>
+          <p class="text-primary">{{ item.title }}</p>
+          <p>
+            {{
+              Number(item.price).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })
+            }}
+          </p>
+          <p @click="deleteProduct(item)">Excluir</p>
         </div>
         <div class="qtd-handler">
           <q-btn rounded dense color="primary" size="sx" icon="remove" />
-          <p>25</p>
-          <q-btn rounded dense color="primary" size="sx" icon="add" />
+          <p>{{ item.quantity }}</p>
+          <q-btn
+            rounded
+            dense
+            color="primary"
+            size="sx"
+            icon="add"
+            @click="addProduct(item)"
+          />
         </div>
       </div>
     </q-card-section>
@@ -20,8 +35,22 @@
 </template>
 
 <script>
+import store from "../store";
+import { api } from "@/services/api";
+
 export default {
   name: "CartCard",
+  props: ["item"],
+  methods: {
+    addProduct(product) {
+      store.dispatch("addProduct", product);
+    },
+    async deleteProduct({ id }) {
+      await api.delete(`cart/products/${id}`);
+
+      store.dispatch("getCart");
+    },
+  },
 };
 </script>
 
@@ -32,10 +61,16 @@ export default {
 
 .img-container {
   width: 200px;
+  padding: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 20px;
+  overflow: hidden;
+
+  img {
+    max-width: 20px;
+  }
 }
 
 .info-container {

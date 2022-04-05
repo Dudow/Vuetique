@@ -1,12 +1,36 @@
 <template>
   <q-intersection transition="scale" class="example-item">
     <q-page class="cards-container q-pa-xl">
-      <Card />
-      <Card />
-      <Card />
+      <Card
+        v-for="cartItem in cart.products"
+        :key="cartItem.id"
+        :item="cartItem"
+      />
     </q-page>
   </q-intersection>
 </template>
+
+<script>
+import Card from "./Card.vue";
+import store from "../store";
+import { mapState } from "vuex";
+
+export default {
+  components: { Card },
+  name: "Home",
+  computed: {
+    ...mapState(["cart"]),
+  },
+  methods: {
+    getCart() {
+      store.dispatch("getCart");
+    },
+  },
+  mounted() {
+    this.getCart();
+  },
+};
+</script>
 
 <style scoped>
 .cards-container {
@@ -16,11 +40,3 @@
   row-gap: 2rem;
 }
 </style>
-
-<script>
-import Card from "./Card.vue";
-export default {
-  components: { Card },
-  name: "Home",
-};
-</script>
